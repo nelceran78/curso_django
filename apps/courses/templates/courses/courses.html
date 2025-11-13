@@ -49,6 +49,30 @@
                             {% endfor %}
 
                         </div>
+
+                        <div class="paginator">
+                            
+                            {% if data_courses.has_previous %}
+                                <button>
+                                    <a href="?page=1&{{data_query_string}}"> <span> |< </span> </a>    
+                                </button>
+                                <button>
+                                    <a href="?page={{data_courses.previous_page_number}}&{{data_query_string}}"> <span> < </span> </a>    
+                                </button>
+                            {% endif %}
+
+                            <span>Página {{data_courses.number}} de {{data_courses.paginator.num_pages}} </span>
+
+                            {% if data_courses.has_next %}
+                                <button>
+                                    <a href="?page={{data_courses.next_page_number}}&{{data_query_string}}"> <span> > </span> </a>
+                                </button>
+                                <button>
+                                    <a href="?page={{data_courses.paginator.num_pages}}&{{data_query_string}}"> >| <span> </span></a>
+                                </button>
+                            {% endif %}
+                                
+                        </div>
                     </div>
 
                 </main>
