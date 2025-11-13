@@ -1,9 +1,15 @@
 from django.shortcuts import render
 from .models.course import Course
+from django.db.models import Q
 
 
 def course_list(request):
     courses = Course.objects.all()
+    querry = request.GET.get('search_querry')
+    if querry:
+        courses = courses.filter(
+            Q(title__icontains=querry) | Q(owner__first_name__icontains=querry)
+        )
     return render(request, 'courses/courses.html', {"data_courses": courses})
 
 
