@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from .models.course import Course
 from django.db.models import Q
+from django.core.paginator import Paginator
 
 
 def course_list(request):
@@ -10,7 +11,21 @@ def course_list(request):
         courses = courses.filter(
             Q(title__icontains=querry) | Q(owner__first_name__icontains=querry)
         )
-    return render(request, 'courses/courses.html', {"data_courses": courses})
+
+    paginator = Paginator(courses, 8)
+    page_number = request.GET.get('page')
+    courses_pag = paginator.get_page(page_number)
+
+    querry_params = request.GET.copy()
+    if "page" in querry_params:
+        querry_params.pop("page")
+    querry_string = querry_params.urlencode()
+
+    return render(request, 'courses/courses.html', {
+        "data_courses": courses_pag,
+        "query": querry,
+        "querry_string": querry_string
+    })
 
 
 def course_detail(request):
