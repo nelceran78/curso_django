@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from .models.course import Course
 from django.db.models import Q
 from django.core.paginator import Paginator
@@ -28,34 +28,12 @@ def course_list(request):
     })
 
 
-def course_detail(request):
-    course = {
-        "course_title": "Django Aplicaciones",
-        "course_links": "course_lessons",
-        "course_image": "images/curso_2.jpg",
-        "info_course": {
-            "lessons": 79,
-            "duration": 8,
-            "instructor": "Ricardo C"
-        },
-        "course_content": [
-            {
-                "id": 1,
-                'name': "Introducción al curso",
-                "lessons": [
-                    {
-                        "name": "Qué aprenderás en el curso",
-                        "type": "video",
-                    },
-                    {
-                        "name": "Cómo usar la plataforma",
-                        "type": "article"
-                    }
-                ]
-            }
-        ]
-    }
-    return render(request, 'courses/course_detail.html', {"data_course": course})
+def course_detail(request, slug):
+    couser = get_object_or_404(Course, slug=slug)
+    modules = couser.modules.prefetch_related('contents')
+    return render(request, 'courses/course_detail.html', {
+        "data_course": couser,
+        "data_modules": modules})
 
 
 def course_lessons(request):

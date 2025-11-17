@@ -28,17 +28,34 @@
 
                             <div class="accordion">
                                 
-                                {% for section in data_course.course_content  %}
+                                {% for module in data_modules  %}
                                     <div class="accordion-item">
-                                        <button class="accordion-header">Seccion {{ section.id }}: {{section.name}}</button>
+                                        <button class="accordion-header">Seccion {{ forloop.counter }}: {{module.title}}</button>
                                         <div class="accordion-content">
                                             <ul>
                                                 
-                                                {% for lesson in section.lessons %}
-                                                    <li><i class="fa-solid 
-                                                    {% if lesson.type == 'video' %}
-                                                        fa-video {% else %} fa-file
-                                                    {% endif %}"></i>{{lesson.name}} ?</li>
+                                                {% for content in module.contents.all %}
+                                                    {% if content.content_type.model == "text"  %}
+                                                        <i class="fa-solid fa-book"></i>
+                                                    {% endif %}
+
+                                                    {% if content.content_type.model == "video"  %}
+                                                        <i class="fa-solid fa-file-video"></i>
+                                                    {% endif %}
+
+                                                    {% if content.content_type.model == "file"  %}
+                                                        <i class="fa-solid fa-file"></i>
+                                                    {% endif %}
+
+                                                    {% if content.content_type.model == "image"  %}
+                                                        <i class="fa-solid fa-file-image"></i>
+                                                    {% endif %}
+
+                                                    {{content.item.title}}
+
+                                                    {% empty%}
+                                                        <i class="fa-solid fa-person-digging"></i>
+                                                        Estamos trabajando en el curso
                                                 {% endfor %}
                                                     
                                             </ul>
@@ -53,18 +70,24 @@
                         <!-- Card lateral -->
                         <div class="course-info-card">
                             <div class="card-banner">
-                                <div class="tag">{devilearn}</div>
-                                <img src="{% static data_course.course_image %}" alt="Curso Django" />
-                                <img class="author-avatar" src="https://randomuser.me/api/portraits/men/15.jpg" alt="Autor">
+                                <div class="tag">{{data_course.level}}</div>
+                                <img src="
+                                    {% if data_course.image%}
+                                    {{data_course.image}}
+                                    {% else %}
+                                    https://images.unsplash.com/photo-1651833826115-7530e72ce504?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8YmxhY2slMjB3YWxscGFwZXJ8ZW58MHx8MHx8fDA%3D
+                                    {% endif %}" alt="{{data_course.title}}" />
+                                <img class="author-avatar" src="{{data_course.owner.instructor_profile.photo}}" alt="Autor">
                             </div>
                             <div class="card-body">
+                                <h1>{{data_course.title}}</h1>
                                 <h3>Acerca de este curso</h3>
                                 <ul class="course-details">
                                     <li><i class="fa-solid fa-file"></i>{{ data_course.info_course.lessons }} clases </li>
-                                    <li><i class="fa-solid fa-video"></i> {{ data_course.info_course.duration }} horas de contenido en video</li>
-                                    <li><i class="fa-solid fa-graduation-cap"></i> {{data_course.info_course.instructor}}</li>
+                                    <li><i class="fa-solid fa-video"></i> {{ data_course.duration }} horas de contenido en video</li>
+                                    <li><i class="fa-solid fa-graduation-cap"></i> {{data_course.owner.get_full_name}}</li>
                                 </ul>
-                                <a class="btn bnt-primary btn-course" href="{% url data_course.course_links %}">Continuar aprendiendo</a>
+                                <a class="btn bnt-primary btn-course" href="">Continuar aprendiendo</a>
 
                             </div>
                         </div>
