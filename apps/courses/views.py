@@ -30,49 +30,21 @@ def course_list(request):
 
 def course_detail(request, slug):
     couser = get_object_or_404(Course, slug=slug)
-    modules = couser.modules.prefetch_related('contents')
+    modules = couser.modules.prefetch_related('contents')  # type: ignore
+    total_content = sum(module.contents.count() for module in modules)
+
     return render(request, 'courses/course_detail.html', {
         "data_course": couser,
-        "data_modules": modules})
+        "data_modules": modules,
+        "total_content": total_content
+    })
 
 
-def course_lessons(request):
-    lesson = {
-        "course_title": "Django Aplicaciones",
-        "progress": 20,
-        "course_content": [
-            {
-                "id": 1,
-                'name': "Introducción al curso",
-                "total_lessons": 6,
-                "complete_lessons": 3,
-                "lessons": [
-                    {
-                        "name": "Qué aprenderás en el curso",
-                        "type": "video",
-                    },
-                    {
-                        "name": "Cómo usar la plataforma",
-                        "type": "article"
-                    }
-                ]
-            },
-            {
-                "id": 2,
-                'name': "Principios de Django",
-                "total_lessons": 12,
-                "complete_lessons": 0,
-                "lessons": [
-                    {
-                        "name": "Introducción a Django",
-                        "type": "video",
-                    },
-                    {
-                        "name": "Instalar Django",
-                        "type": "article"
-                    }
-                ]
-            }
-        ]
-    }
-    return render(request, 'courses/course_lessons.html', {"data_lesson": lesson})
+def course_lessons(request, slug):
+    course = get_object_or_404(Course, slug=slug)
+    course_title = course.title
+    moudeles = course.modules.prefetch_related('contents')  # type: ignore
+    return render(request, 'courses/course_lessons.html', {
+        "data_title": course_title,
+        "data_modules": moudeles
+    })

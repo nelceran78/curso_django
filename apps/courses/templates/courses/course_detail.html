@@ -33,31 +33,31 @@
                                         <button class="accordion-header">Seccion {{ forloop.counter }}: {{module.title}}</button>
                                         <div class="accordion-content">
                                             <ul>
-                                                
                                                 {% for content in module.contents.all %}
-                                                    {% if content.content_type.model == "text"  %}
-                                                        <i class="fa-solid fa-book"></i>
-                                                    {% endif %}
+                                                    <li>
+                                                        {% if content.content_type.model == "text"  %}
+                                                            <i class="fa-solid fa-book"></i>
+                                                        {% endif %}
 
-                                                    {% if content.content_type.model == "video"  %}
-                                                        <i class="fa-solid fa-file-video"></i>
-                                                    {% endif %}
+                                                        {% if content.content_type.model == "video"  %}
+                                                            <i class="fa-solid fa-file-video"></i>
+                                                        {% endif %}
 
-                                                    {% if content.content_type.model == "file"  %}
-                                                        <i class="fa-solid fa-file"></i>
-                                                    {% endif %}
+                                                        {% if content.content_type.model == "file"  %}
+                                                            <i class="fa-solid fa-file"></i>
+                                                        {% endif %}
 
-                                                    {% if content.content_type.model == "image"  %}
-                                                        <i class="fa-solid fa-file-image"></i>
-                                                    {% endif %}
+                                                        {% if content.content_type.model == "image"  %}
+                                                            <i class="fa-solid fa-file-image"></i>
+                                                        {% endif %}
 
-                                                    {{content.item.title}}
+                                                        {{content.item.title}}
 
-                                                    {% empty%}
-                                                        <i class="fa-solid fa-person-digging"></i>
-                                                        Estamos trabajando en el curso
+                                                        {% empty%}
+                                                            <i class="fa-solid fa-person-digging"></i>
+                                                            Estamos trabajando en el curso
+                                                    </li>
                                                 {% endfor %}
-                                                    
                                             </ul>
                                         </div>
                                     </div>
@@ -83,11 +83,11 @@
                                 <h1>{{data_course.title}}</h1>
                                 <h3>Acerca de este curso</h3>
                                 <ul class="course-details">
-                                    <li><i class="fa-solid fa-file"></i>{{ data_course.info_course.lessons }} clases </li>
+                                    <li><i class="fa-solid fa-file"></i>{{ total_content }} clases </li>
                                     <li><i class="fa-solid fa-video"></i> {{ data_course.duration }} horas de contenido en video</li>
                                     <li><i class="fa-solid fa-graduation-cap"></i> {{data_course.owner.get_full_name}}</li>
                                 </ul>
-                                <a class="btn bnt-primary btn-course" href="">Continuar aprendiendo</a>
+                                <a class="btn bnt-primary btn-course" href="{% url 'course_lessons' slug=data_course.slug %}">Continuar aprendiendo</a>
 
                             </div>
                         </div>
